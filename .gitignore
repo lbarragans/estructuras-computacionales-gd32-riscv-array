@@ -1,0 +1,38 @@
+# Configuración local
+tools/local_config.ps1
+CMakeUserPresets.json
+.vscode/launch.json
+
+# Directorios generados por CMake
+/build/
+/Build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+build.ninja
+.ninja_deps
+.ninja_log
+
+# Binarios y resultados de compilación
+*.o
+*.obj
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.a
+
+# Archivos generados por GD32 Embedded Builder
+objects.list
+sources.mk
+subdir.mk
+
+# Archivos temporales del editor o del sistema
+*.tmp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+

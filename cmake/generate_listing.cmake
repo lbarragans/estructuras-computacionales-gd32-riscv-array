@@ -1,0 +1,16 @@
+if(NOT DEFINED OBJDUMP OR NOT DEFINED ELF OR NOT DEFINED OUTPUT)
+    message(FATAL_ERROR "OBJDUMP, ELF or OUTPUT is missing")
+endif()
+
+execute_process(
+    COMMAND "${OBJDUMP}" -h -S "${ELF}"
+    OUTPUT_FILE "${OUTPUT}"
+    ERROR_VARIABLE OBJDUMP_ERROR
+    RESULT_VARIABLE OBJDUMP_RESULT
+)
+
+if(NOT OBJDUMP_RESULT EQUAL 0)
+    message(FATAL_ERROR "objdump failed: ${OBJDUMP_ERROR}")
+endif()
+
+
