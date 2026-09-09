@@ -1,0 +1,42 @@
+# =============================================================================
+# GitHub Linguist — repositorio educativo GD32VW553
+# Implementación principal: RISC-V Assembly
+#
+# Objetivo:
+#   - Assembly es el ÚNICO código que participa en la barra de lenguajes.
+#   - main.c se conserva como arnés de prueba/soporte, pero no se contabiliza.
+#   - PowerShell, CMake, JSON, documentación y configuración tampoco cuentan.
+# =============================================================================
+
+# Código Assembly principal
+*.S linguist-language=Assembly
+*.s linguist-language=Assembly
+
+# Arnés de prueba C: se conserva, pero NO altera el porcentaje del ejercicio
+Src/main.c linguist-detectable=false
+*.h linguist-detectable=false
+
+# Herramientas y automatización
+*.ps1 linguist-detectable=false
+*.bat linguist-detectable=false
+*.cmd linguist-detectable=false
+tools/** linguist-detectable=false
+
+# CMake / configuración
+CMakeLists.txt linguist-detectable=false
+*.cmake linguist-detectable=false
+CMakePresets.json linguist-detectable=false
+*.json linguist-detectable=false
+.vscode/** linguist-detectable=false
+
+# Documentación
+*.md linguist-documentation=true
+Doc/** linguist-documentation=true
+
+# Linker y artefactos
+*.ld linguist-detectable=false
+*.lds linguist-detectable=false
+*.map linguist-generated=true
+*.lst linguist-generated=true
+*.hex linguist-generated=true
+*.bin linguist-generated=true
