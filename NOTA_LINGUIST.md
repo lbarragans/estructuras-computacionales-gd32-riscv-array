@@ -1,17 +1,28 @@
-# Por qué `main.c` no se contará en este repositorio
+# Política de lenguajes del repositorio
 
-El ejercicio contiene un archivo `Src/main.c` que sirve como **arnés de prueba** para invocar y verificar funciones escritas en RISC-V Assembly.
+Este ejercicio utiliza realmente **C y RISC-V Assembly**.
 
-Ese archivo es útil y debe conservarse.
+- `Src/main.c` forma parte de la solución y debe contarse como **C**.
+- Los archivos `.S`/`.s` forman parte de la solución y deben contarse como **Assembly**.
+- Los archivos auxiliares de construcción, configuración y automatización no deben alterar la barra de lenguajes.
 
-Sin embargo, el propósito académico del repositorio es estudiar Assembly. Por eso `.gitattributes` contiene:
+Por eso GitHub debe mostrar una combinación semejante a:
 
-```gitattributes
-Src/main.c linguist-detectable=false
+```text
+C          xx.x %
+Assembly   yy.y %
 ```
 
-Esto no cambia la compilación, no borra el archivo y no modifica su comportamiento.
+Los porcentajes exactos dependen de la cantidad de código de cada lenguaje y siempre suman 100%.
 
-Únicamente evita que GitHub Linguist mezcle C con Assembly al calcular la barra de lenguajes.
+## Regla que seguiremos en todos los repositorios
 
-El código `.S` sigue siendo el código principal del ejercicio.
+**Si un lenguaje participa realmente en la implementación, debe aparecer.**
+
+Ejemplos:
+
+- C puro → C 100%.
+- Assembly puro → Assembly 100%.
+- C + Assembly → aparecen ambos.
+- FreeRTOS → normalmente aparece C, y se documenta FreeRTOS como tecnología.
+- PowerShell/CMake/JSON/Markdown de soporte → no cuentan como lenguaje de la solución.
