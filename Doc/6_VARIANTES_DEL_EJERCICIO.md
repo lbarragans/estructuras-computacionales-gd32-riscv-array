@@ -1,38 +1,33 @@
-# Variantes del ejercicio
+# 6. Variantes del procesamiento de arreglos
 
-## Objetivo de esta sección
+## Objetivo
 
-Un mismo resultado visible puede obtenerse con arquitecturas de software distintas. Esta sección sirve como menú comparativo y como guía de estudio.
+Resolver y analizar el mismo problema de procesamiento de datos desde distintos
+niveles de abstraccion.
 
-## Formas de implementación
+## Comparacion
 
-| Variante | Lenguaje / tecnología | Idea principal | Estado |
-|---|---|---|---|
-| C bare-metal | C | acceso a periféricos y ejecución secuencial | disponible / relacionada |
-| Assembly RISC-V | Assembly | instrucciones y registros directamente visibles | por implementar o enlazar |
-| Interrupciones | C / Assembly | reacción a eventos sin espera activa | disponible / relacionada |
-| Máquina de estados | C | comportamiento no bloqueante | disponible / relacionada |
-| Scheduler cooperativo | C | varias tareas sin RTOS completo | relacionada |
-| FreeRTOS | C + FreeRTOS | tareas administradas por un scheduler | siguiente evolución |
-| Híbrido C + Assembly | C + Assembly | combinar abstracción y control de bajo nivel | siguiente evolución |
+| Variante | Acceso a memoria | Control del bucle | Uso de ABI | Concurrencia |
+|---|---|---|---|---|
+| Hibrida actual | Assembly `lw` | Assembly | Si | No |
+| C por indices | `values[i]` | C | compilador | No |
+| C por punteros | `*ptr++` | C | compilador | No |
+| Assembly completo | `lw` | branches | Si | No |
+| Assembly unrolled | dos `lw`/iteracion | menos branches | Si | No |
+| Signed/unsigned | `lw` | `bge`/`bgeu` | Si | No |
+| ABI + stack | `lw` + estructura | branches | avanzada | No |
+| Hibrida extendida | C + Assembly | ambos | Si | No |
+| FreeRTOS | C/Assembly | scheduler | Si | Si |
 
-> **Importante:** FreeRTOS no es un lenguaje. Normalmente se programa en C. Por eso GitHub puede mostrar `C 100%` aunque la técnica usada sea FreeRTOS.
+## Preguntas guia
 
-## ¿Por qué conservar varias soluciones?
-
-Porque dos programas pueden producir exactamente el mismo resultado físico y, sin embargo, utilizar la CPU de manera completamente distinta.
-
-Ejemplo: un LED que cambia cada segundo puede implementarse con:
-
-- espera activa;
-- temporizador e interrupción;
-- máquina de estados;
-- tarea FreeRTOS.
-
-El LED puede verse igual, pero cambian el consumo de CPU, la escalabilidad, la precisión temporal y la forma de razonar sobre el sistema.
-
-## Pregunta guía
-
-Antes de mirar el código, responder:
-
-> ¿Qué está haciendo el procesador mientras espera que ocurra el siguiente evento?
+1. ¿Por que un `int32_t` hace avanzar el puntero 4 bytes?
+2. ¿Que diferencia existe entre `lw` y el valor almacenado en el registro?
+3. ¿Que registro contiene el primer argumento de una funcion?
+4. ¿Por que el resultado vuelve normalmente en `a0`?
+5. ¿Que diferencia hay entre `bge` y `bgeu`?
+6. ¿Que registros debe restaurar una funcion si usa `s0-s11`?
+7. ¿Que ventaja y costo tiene desenrollar un bucle?
+8. ¿Cuando tiene sentido dividir el procesamiento en tareas FreeRTOS?
+9. ¿Por que una interrupcion no es una alternativa natural para procesar un
+   arreglo que ya esta disponible en RAM?

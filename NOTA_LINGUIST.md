@@ -1,28 +1,29 @@
-# Política de lenguajes del repositorio
+# Politica de lenguajes en este repositorio
 
-Este ejercicio utiliza realmente **C y RISC-V Assembly**.
+Este repositorio contiene implementaciones reales en **C y Assembly RISC-V**.
 
-- `Src/main.c` forma parte de la solución y debe contarse como **C**.
-- Los archivos `.S`/`.s` forman parte de la solución y deben contarse como **Assembly**.
-- Los archivos auxiliares de construcción, configuración y automatización no deben alterar la barra de lenguajes.
+Por tanto, ambos lenguajes deben participar en la barra de lenguajes de GitHub.
 
-Por eso GitHub debe mostrar una combinación semejante a:
+No se fuerza:
 
 ```text
-C          xx.x %
-Assembly   yy.y %
+C 100%
 ```
 
-Los porcentajes exactos dependen de la cantidad de código de cada lenguaje y siempre suman 100%.
+ni:
 
-## Regla que seguiremos en todos los repositorios
+```text
+Assembly 100%
+```
 
-**Si un lenguaje participa realmente en la implementación, debe aparecer.**
+si ambos forman parte del repositorio.
 
-Ejemplos:
+La regla global es:
 
-- C puro → C 100%.
-- Assembly puro → Assembly 100%.
-- C + Assembly → aparecen ambos.
-- FreeRTOS → normalmente aparece C, y se documenta FreeRTOS como tecnología.
-- PowerShell/CMake/JSON/Markdown de soporte → no cuentan como lenguaje de la solución.
+- C cuenta cuando implementa parte real del algoritmo.
+- Assembly cuenta cuando implementa parte real del algoritmo.
+- FreeRTOS se documenta como tecnologia, no como lenguaje.
+- PowerShell, CMake, JSON, configuracion de VS Code y Markdown son auxiliares.
+
+El archivo `.gitattributes` existente ya implementa esta politica y no necesita
+ser sustituido en esta fase.

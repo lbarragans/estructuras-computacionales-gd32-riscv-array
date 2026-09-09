@@ -1,125 +1,245 @@
-# Procesamiento de arreglos en ensamblador RISC-V con GD32VW553
+# Procesamiento de arreglos en GD32VW553: C, Assembly RISC-V y distintas arquitecturas
 
-**Unidad:** Procesamiento y transferencia de información en sistemas embebidos RISC-V  
-**Autora:** Laura Daniela Barragán Silva  
+**Unidad:** Procesamiento y transferencia de informacion en sistemas embebidos RISC-V
+**Autora:** Laura Daniela Barragan Silva
 **Plataforma:** GD32VW553HMQ6/HMQ7  
 **Arquitectura:** RISC-V RV32
 
-## Propósito
+## 1. Proposito
 
-El proyecto llama desde C a dos funciones escritas en ensamblador RISC-V. Las
-funciones recorren un arreglo de enteros de 32 bits, calculan su suma y su
-máximo, y retornan los resultados mediante la ABI de RISC-V.
+La implementacion principal del repositorio se conserva intacta:
 
-El cálculo se repite en C como referencia. Si ambas implementaciones coinciden,
-el LED PC13 emite cinco pulsos. Si no coinciden, parpadea rápidamente.
-
-## Objetivos
-
-- Comprender la interacción entre C y ensamblador.
-- Reconocer argumentos y retornos en a0 y a1.
-- Usar los temporales t0, t1 y t2.
-- Recorrer memoria mediante punteros y lw.
-- Interpretar negativos en complemento a dos.
-- Depurar registros y variables en VS Code.
-
-## Datos y resultados
-
-    {2, -1, 5, 3, -2, 1}
-
-| Operación | C | Ensamblador |
-|---|---:|---:|
-| Suma | 8 | 8 |
-| Máximo | 5 | 5 |
-
-Variables esperadas:
-
-    g_sum_c          = 8
-    g_sum_asm        = 8
-    g_max_c          = 5
-    g_max_asm        = 5
-    g_results_match  = 1
-
-## Diagrama de bloques
-
-```mermaid
-flowchart LR
-    A["Arreglo en memoria<br/>2, -1, 5, 3, -2, 1"]
-    B["Referencia en C"]
-    C["Funciones en<br/>ensamblador RISC-V"]
-    D{"Comparación"}
-    E["PC13:<br/>5 pulsos"]
-    F["PC13:<br/>parpadeo rápido"]
-    A --> B
-    A --> C
-    B --> D
-    C --> D
-    D -->|"Iguales"| E
-    D -->|"Diferentes"| F
+```text
+Src/main.c
+Src/array_riscv.S
+Inc/array_riscv.h
 ```
 
-## Flujo de registros
+El programa calcula la suma y el maximo del arreglo:
 
-```mermaid
-sequenceDiagram
-    participant C as Programa C
-    participant ABI as ABI RISC-V
-    participant ASM as Ensamblador
-    participant M as Memoria
-    C->>ABI: a0 = dirección, a1 = longitud
-    ABI->>ASM: llamada a la función
-    ASM->>M: lw lee cada elemento
-    M-->>ASM: entero de 32 bits
-    ASM->>ABI: resultado en a0
-    ABI-->>C: retorno
+```text
+{2, -1, 5, 3, -2, 1}
 ```
 
-| Registro | Función |
-|---|---|
-| a0 (x10) | Dirección inicial y luego resultado |
-| a1 (x11) | Número de elementos |
-| t0 (x5) | Puntero o máximo temporal |
-| t1 (x6) | Contador o dato leído |
-| t2 (x7) | Elemento usado durante la suma |
-| ra (x1) | Dirección de retorno |
-| sp (x2) | Puntero de pila |
+dos veces:
 
-La explicación completa está en
-[Conceptos y preguntas](Doc/3_CONCEPTS_AND_QUESTIONS.md).
+```text
+Referencia en C
+        ↓
+Comparacion
+        ↑
+Funciones Assembly RISC-V
+```
 
-## Resultado físico
+Si los resultados coinciden, el LED PC13 muestra cinco pulsos; si no coinciden,
+parpadea rapidamente.
 
-    Cinco destellos cortos
-            ↓
-    Pausa aproximada de 1,5 segundos
-            ↓
-    Repetición
+La version principal sigue siendo la que compila por defecto. Las nuevas
+implementaciones viven en `Variantes/` y se integraran/validaran una por una.
 
-No se requiere protoboard ni componentes externos.
+## 2. Menu de implementaciones
 
-## Inicio rápido
+| # | Variante | Lenguaje / tecnologia | Concepto central | Estado |
+|---:|---|---|---|---|
+| 01 | Hibrida actual | C + Assembly | ABI, `a0/a1`, `lw`, punteros | Base actual |
+| 02 | C puro por indices | C | algoritmo de referencia | Fuente lista |
+| 03 | C puro con punteros | C | aritmetica de punteros | Fuente lista |
+| 04 | Operaciones en Assembly | Assembly | recorrido, suma, min, max, conteo | Fuente lista |
+| 05 | Assembly con loop unrolling | Assembly | menos saltos vs claridad | Fuente lista |
+| 06 | Signed vs unsigned | C + Assembly | `bge` frente a `bgeu` | Fuente lista |
+| 07 | ABI avanzada + stack | C + Assembly | `sp`, registros `s`, caller/callee-saved | Fuente lista |
+| 08 | Hibrida con estadisticas extendidas | C + Assembly | modularidad C/ASM | Fuente lista |
+| 09 | FreeRTOS productor-procesador-verificador | C + Assembly + FreeRTOS | tareas y colas | Integracion pendiente |
+| 10 | Por que NO usar interrupciones aqui | Documentacion | seleccionar la arquitectura adecuada | Analisis |
 
-1. Copie tools/local_config.example.ps1 como tools/local_config.ps1.
-2. Configure las tres rutas locales.
-3. Abra esta carpeta como raíz en VS Code.
-4. Ejecute Build + Flash GD32 Assembly Array.
+Ver [`Variantes/README.md`](Variantes/README.md).
 
-Comandos equivalentes:
+## 3. Por que la implementacion actual funciona
 
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\configure.ps1 -BuildType Debug
-    cmake --build --preset build-debug
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\flash.ps1 -BuildType Debug
+La ABI RISC-V define donde viajan argumentos y valores de retorno.
 
-## Depuración
+Para:
 
-    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\create_debug_config.ps1
+```c
+riscv_array_sum(values, length);
+```
 
-Use Step Into para entrar en Src/array_riscv.S y despliegue Registers.
+la llamada usa conceptualmente:
 
-## Documentación
+```text
+a0 = direccion del primer elemento
+a1 = cantidad de elementos
+```
 
-- [Configuración](Doc/1_SETUP.md)
-- [Compilación y programación](Doc/2_BUILD_AND_FLASH.md)
-- [Conceptos, registros y preguntas](Doc/3_CONCEPTS_AND_QUESTIONS.md)
-- [Depuración](Doc/4_DEBUGGING.md)
-- [Solución de problemas](Doc/5_TROUBLESHOOTING.md)
+Assembly avanza el puntero cuatro bytes por elemento, porque cada `int32_t`
+ocupa 4 bytes:
+
+```asm
+lw      t2, 0(t0)
+addi    t0, t0, 4
+```
+
+El resultado vuelve a C en `a0`.
+
+## 4. Que cambia entre C y Assembly
+
+En C podemos escribir:
+
+```c
+sum += values[index];
+```
+
+En Assembly debemos hacer visibles las operaciones:
+
+```text
+direccion
+    ↓
+carga desde memoria
+    ↓
+operacion aritmetica
+    ↓
+avance del puntero
+    ↓
+control del bucle
+```
+
+Por eso este ejercicio es especialmente util para estudiar la relacion entre:
+
+```text
+algoritmo -> compilador -> instrucciones -> registros -> memoria
+```
+
+## 5. Indices frente a punteros
+
+Estas dos expresiones C pueden representar el mismo acceso:
+
+```c
+values[index]
+```
+
+y
+
+```c
+*pointer
+```
+
+pero la segunda se aproxima visualmente a lo que vemos en Assembly:
+
+```asm
+lw t2, 0(t0)
+addi t0, t0, 4
+```
+
+## 6. Signed frente a unsigned
+
+El arreglo principal contiene numeros negativos.
+
+Por eso el maximo de enteros con signo debe utilizar una comparacion signed:
+
+```asm
+bge
+```
+
+Una comparacion unsigned:
+
+```asm
+bgeu
+```
+
+interpreta el patron binario de `-1` como un valor positivo muy grande.
+
+Este contraste se estudia en la variante 06.
+
+## 7. ABI y pila
+
+La implementacion base utiliza principalmente registros temporales `t0-t2`.
+
+En la variante 07 construiremos una funcion mas grande que usa registros
+preservados `s0-s4` y la pila. Esto permite estudiar de forma concreta:
+
+- `sp`;
+- stack frame;
+- caller-saved;
+- callee-saved;
+- prologo y epilogo;
+- retorno por estructura de salida.
+
+## 8. Optimizacion: no siempre menos instrucciones significa mejor codigo educativo
+
+La variante de loop unrolling procesa dos elementos por iteracion.
+
+Puede reducir el numero de saltos, pero tambien:
+
+- aumenta el codigo;
+- complica el caso de longitud impar;
+- dificulta la lectura;
+- puede no mejorar el rendimiento en todos los contextos.
+
+La conclusion debe basarse en medicion, no solo en apariencia.
+
+## 9. FreeRTOS
+
+FreeRTOS no es un lenguaje.
+
+En la variante 09:
+
+```text
+Productor -> Queue -> Procesador Assembly -> Queue -> Verificador C
+```
+
+Esta arquitectura tiene sentido si los arreglos llegan de forma asincrona o si
+hay otras tareas concurrentes.
+
+Para un unico arreglo constante procesado una sola vez, FreeRTOS seria una
+solucion innecesariamente compleja.
+
+La variante se mantiene como **integracion pendiente** porque el CMake actual no
+enlaza el kernel FreeRTOS ni su port RISC-V.
+
+## 10. ¿Y las interrupciones?
+
+Una interrupcion es apropiada cuando existe un evento asincrono:
+
+- UART recibe un byte;
+- ADC completa una conversion;
+- un temporizador vence;
+- cambia una entrada digital.
+
+Pero la suma de un arreglo que ya esta en RAM es trabajo secuencial de CPU.
+
+Forzar una interrupcion para "hacer la suma de otra manera" no aporta una
+arquitectura mejor. Esta decision se documenta en la variante 10.
+
+## 11. Lenguajes en GitHub
+
+La politica global ya establecida se mantiene:
+
+```text
+C        -> cuenta si se usa realmente
+Assembly -> cuenta si se usa realmente
+
+PowerShell -> no cuenta
+CMake      -> no cuenta
+JSON       -> no cuenta
+Markdown   -> documentacion
+```
+
+Los porcentajes exactos no se fuerzan.
+
+## 12. Validacion
+
+Agregar una fuente a `Variantes/` no significa que ya este validada en hardware.
+
+Cada variante debe pasar posteriormente por:
+
+1. revision;
+2. integracion CMake;
+3. compilacion;
+4. warnings;
+5. prueba con datos normales;
+6. casos limite;
+7. depuracion de registros/memoria;
+8. prueba en placa cuando corresponda;
+9. commit de validacion.
+
+Ver [`Doc/7_PLAN_DE_VALIDACION.md`](Doc/7_PLAN_DE_VALIDACION.md).
