@@ -1,8 +1,8 @@
 # Ejercicio 02 - Procesamiento de arreglos en GD32VW553
 
-**Unidad:** Procesamiento y transferencia de informacion en sistemas embebidos RISC-V  
-**Autora:** Laura Daniela Barragan Silva  
-**Plataforma:** GD32VW553HMQ6/HMQ7  
+**Unidad:** Procesamiento y transferencia de informacion en sistemas embebidos RISC-V
+**Autora:** Laura Daniela Barragan Silva
+**Plataforma:** GD32VW553HMQ6/HMQ7
 **Arquitectura:** RISC-V RV32
 
 ## 1. Implementacion original de referencia
