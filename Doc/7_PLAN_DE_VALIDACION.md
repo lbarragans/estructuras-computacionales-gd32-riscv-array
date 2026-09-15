@@ -1,90 +1,58 @@
-# 7. Plan de validacion de variantes
+# 7. Plan de validacion
 
-## Casos de prueba obligatorios
+## Referencia original
 
-Cada algoritmo debe probarse al menos con:
-
-```text
-A = {2, -1, 5, 3, -2, 1}
-suma = 8
-maximo = 5
-minimo = -2
-positivos = 4
-```
-
-Ademas:
-
-### Un solo elemento
+Comprobar primero:
 
 ```text
-{7}
+suma C       = 8
+suma RISC-V  = 8
+maximo C     = 5
+maximo RISC-V= 5
 ```
 
-### Todos negativos
+y la secuencia de cinco pulsos en PC13.
 
-```text
-{-8, -3, -10, -1}
-```
+## Ensamblador RISC-V puro
 
-### Valores repetidos
+Validar:
 
-```text
-{4, 4, 4, 4}
-```
+1. integracion de `Ensamblador_RISCV_Puro/main.S`;
+2. ausencia de archivos `.c` dentro del apartado;
+3. arreglo correcto en `.rodata`;
+4. seis cargas de elementos mediante el bucle;
+5. suma esperada igual a 8;
+6. maximo signed esperado igual a 5;
+7. variables de depuracion actualizadas;
+8. configuracion directa de GPIOC;
+9. cinco pulsos si los resultados son correctos;
+10. parpadeo rapido si la comprobacion falla;
+11. prueba fisica en placa.
 
-### Longitud cero
+## FreeRTOS puro
 
-Cuando la interfaz lo permita, debe existir una politica documentada para
-`length == 0`.
+Validar:
 
-### Signed vs unsigned
+1. kernel FreeRTOS;
+2. port RISC-V;
+3. `FreeRTOSConfig.h`;
+4. heap;
+5. creacion de queues;
+6. creacion de ProducerTask;
+7. creacion de ProcessorTask;
+8. creacion de IndicatorTask;
+9. transferencia del trabajo por queue;
+10. transferencia del resultado por queue;
+11. suma igual a 8;
+12. maximo igual a 5;
+13. uso de `vTaskDelay()` sin busy-wait;
+14. cinco pulsos en la placa;
+15. ausencia de llamadas a `riscv_array_sum()` y `riscv_array_max()` en este apartado.
 
-```text
-{-1, 1, 2}
-```
+## Estados
 
-Debe mostrar por que un maximo signed y uno unsigned pueden ser diferentes.
-
-## Validacion Assembly
-
-Durante depuracion revisar:
-
-- `a0`;
-- `a1`;
-- `t0-t6`;
-- `s0-s4` cuando aplique;
-- `sp`;
-- memoria apuntada;
-- retorno.
-
-## Rendimiento
-
-La variante unrolled no se declarara "mas rapida" sin medir.
-
-Medidas posibles:
-
-- ciclos si hay contador disponible;
-- tiempo por GPIO;
-- numero de instrucciones en `.lst`;
-- inspeccion del desensamblado.
-
-## FreeRTOS
-
-Solo se marcara validada despues de integrar:
-
-- kernel;
-- port RISC-V;
-- `FreeRTOSConfig.h`;
-- heap;
-- tick;
-- colas;
-- scheduler.
-
-## Estados documentales
-
-- **Base actual**
-- **Fuente lista**
-- **Integracion pendiente**
-- **Analisis**
-- **Validada por compilacion**
-- **Validada en placa**
+- referencia funcional;
+- fuente lista;
+- integracion pendiente;
+- validada por compilacion;
+- validada en placa.

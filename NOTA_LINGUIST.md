@@ -1,29 +1,11 @@
-# Politica de lenguajes en este repositorio
+# Politica de lenguajes
 
-Este repositorio contiene implementaciones reales en **C y Assembly RISC-V**.
+El repositorio contiene codigo real en C y en ensamblador RISC-V.
 
-Por tanto, ambos lenguajes deben participar en la barra de lenguajes de GitHub.
+La implementacion FreeRTOS esta escrita en C.
 
-No se fuerza:
+Los archivos auxiliares de PowerShell, CMake, VS Code, JSON y Markdown no
+forman parte de los lenguajes de implementacion y se excluyen mediante
+`.gitattributes`.
 
-```text
-C 100%
-```
-
-ni:
-
-```text
-Assembly 100%
-```
-
-si ambos forman parte del repositorio.
-
-La regla global es:
-
-- C cuenta cuando implementa parte real del algoritmo.
-- Assembly cuenta cuando implementa parte real del algoritmo.
-- FreeRTOS se documenta como tecnologia, no como lenguaje.
-- PowerShell, CMake, JSON, configuracion de VS Code y Markdown son auxiliares.
-
-El archivo `.gitattributes` existente ya implementa esta politica y no necesita
-ser sustituido en esta fase.
+GitHub Linguist puede mostrar el nombre `Assembly` para los archivos `.S`.
