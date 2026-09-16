@@ -1,51 +1,24 @@
-# Integracion pendiente de FreeRTOS
+# Integracion funcional con el MSDK oficial
 
-Para compilar este apartado deben integrarse:
+Esta variante usa el FreeRTOS, port Nuclei/ECLIC, heap, tick, startup y linker
+ya integrados y probados por GigaDevice en `GD32VW55x_RELEASE_V1.0.3g`.
 
-```text
-FreeRTOS kernel
-port RISC-V compatible con GD32VW553
-FreeRTOSConfig.h
-heap_x.c
-tick
-context switch
-queue.c
-includes del kernel
-fuentes del kernel en CMake
+Todo se ejecuta desde la terminal integrada o las tareas de VS Code:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File .\tools\build_freertos.ps1 `
+  -Clean -Flash
 ```
 
-## Configuracion necesaria
+El script respalda la aplicacion original del MSDK, copia `main.c` y
+`app_cfg.h`, compila MBL + MSDK, genera `image-all.bin` y lo programa por
+WCH-Link/CMSIS-DAP. No se necesita CH340, BOOT0 ni un IDE del fabricante.
 
-Debe estar habilitada la API de retardo utilizada:
+`main.c` llama `platform_init()`, crea las tareas/objetos FreeRTOS y entrega
+el control a `sys_os_start()`. No descargue otro kernel ni mezcle un port
+RISC-V generico con el ECLIC de este dispositivo.
 
-```text
-INCLUDE_vTaskDelay = 1
-```
-
-## Diferencia con la referencia original
-
-La referencia utiliza C + rutinas RISC-V.
-
-El apartado FreeRTOS puro no llama:
-
-```text
-riscv_array_sum()
-riscv_array_max()
-```
-
-El procesamiento se realiza dentro de `ProcessorTask` en C y la transferencia de
-trabajo/resultados se hace con queues.
-
-## Validacion
-
-Solo marcar como validada despues de:
-
-1. configurar;
-2. compilar;
-3. enlazar;
-4. arrancar scheduler;
-5. crear las dos queues;
-6. crear las tres tareas;
-7. obtener suma 8;
-8. obtener maximo 5;
-9. observar cinco pulsos en PC13.
+El patron correcto son cinco pulsos de PC13 por cada resultado valido. En el
+depurador deben observarse `g_freertos_sum = 8`, `g_freertos_max = 5` y
+`g_freertos_ok = 1`.

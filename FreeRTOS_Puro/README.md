@@ -65,5 +65,5 @@ Si falla muestra una secuencia rapida.
 
 ## Estado
 
-Integracion pendiente hasta enlazar el kernel, port RISC-V, heap,
-`FreeRTOSConfig.h` y tick.
+Aplicacion MSDK completa. El kernel, port, heap y tick provienen del SDK
+oficial V1.0.3g según `INTEGRACION.md`.

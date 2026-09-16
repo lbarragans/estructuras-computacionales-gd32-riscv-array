@@ -180,8 +180,8 @@ entero positivo sin signo muy grande.
 | Implementacion | Estado |
 |---|---|
 | `Src/main.c` + `Src/array_riscv.S` | referencia funcional |
-| `Ensamblador_RISCV_Puro` | fuente lista; pendiente de integracion y validacion en placa |
-| `FreeRTOS_Puro` | fuente lista; integracion del kernel/port pendiente |
+| `Ensamblador_RISCV_Puro` | compilable y programable con `build_variant.ps1` |
+| `FreeRTOS_Puro` | compilable y programable con `build_freertos.ps1` y MSDK V1.0.3g |
 
 ## 8. Lenguajes
 
@@ -210,3 +210,31 @@ FreeRTOS_Puro
 ```
 
 No se conservaran las antiguas variantes comparativas.
+
+## Ejecutar las variantes
+
+Referencia original por JTAG/OpenOCD:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\\tools\\build_variant.ps1 -Variant original -Flash
+```
+
+Assembly puro por JTAG/OpenOCD:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\\tools\\build_variant.ps1 -Variant assembly -Flash
+```
+
+FreeRTOS usa el port oficial del SDK WiFi V1.0.3g:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_freertos.ps1 -Clean -Flash
+```
+
+Resultado esperado: cinco pulsos repetidos en PC13. En caso de error se
+presenta una secuencia rapida de diez cambios.
+
+## Guía central de ejecución
+
+Siga la [guía central GD32VW553](https://github.com/lbarragans/gd32vw553-vscode-cmake-guide)
+para preparar VS Code, compilar, programar y depurar cada variante.

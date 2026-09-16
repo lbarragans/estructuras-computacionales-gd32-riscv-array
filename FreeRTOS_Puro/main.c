@@ -1,5 +1,9 @@
 #include <stdint.h>
 
+#include "app_cfg.h"
+#include "gd32vw55x_platform.h"
+#include "wrapper_os.h"
+
 #include "gd32vw55x.h"
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -214,6 +218,8 @@ static void indicator_task(void *argument)
 
 int main(void)
 {
+    sys_os_init();
+    platform_init();
     led_init();
 
     job_queue = xQueueCreate(
@@ -266,7 +272,7 @@ int main(void)
         }
     }
 
-    vTaskStartScheduler();
+    sys_os_start();
 
     for (;;) {
     }

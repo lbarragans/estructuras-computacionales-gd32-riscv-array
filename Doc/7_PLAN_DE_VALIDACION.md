@@ -53,6 +53,18 @@ Validar:
 
 - referencia funcional;
 - fuente lista;
-- integracion pendiente;
+- integrada mediante `APP_VARIANT=assembly` o como aplicacion MSDK FreeRTOS;
 - validada por compilacion;
 - validada en placa.
+
+## Comandos de validacion en VS Code
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_variant.ps1 -Variant original -Flash
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_variant.ps1 -Variant assembly -Flash
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_freertos.ps1 -Clean -Flash
+```
+
+La referencia debe indicar coincidencia entre C y Assembly. Las variantes
+Assembly pura y FreeRTOS deben producir cinco pulsos en PC13; el patron rapido
+de error no debe aparecer.

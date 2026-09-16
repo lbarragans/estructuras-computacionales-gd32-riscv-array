@@ -45,8 +45,10 @@ $LaunchConfiguration = [ordered]@{
             searchDir = @(Convert-ToVsCodePath $OpenOcdScripts)
             configFiles = @("interface/cmsis-dap.cfg")
             openOCDLaunchCommands = @(
+                "cmsis_dap_backend usb_bulk",
+                "cmsis_dap_vid_pid 0x1a86 0x8012",
                 "transport select jtag",
-                "adapter speed 100",
+                "adapter speed 50",
                 "source [find target/gd32vw55x.cfg]"
             )
             overrideLaunchCommands = @(
@@ -66,4 +68,3 @@ $LaunchConfiguration | ConvertTo-Json -Depth 8 |
     Set-Content -Path $LaunchFile -Encoding UTF8
 
 Write-Host "Created: $LaunchFile"
-
